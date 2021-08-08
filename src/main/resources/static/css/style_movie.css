@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    background-color: rgb(12, 11, 11);
+}
+main {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+main div {
+    margin: 50px 40px;
+    border-radius: 16px;
+    background-color: rgb(241, 241, 241);
+}
+main div#poster {
+    margin-left: 70px;
+    width: 50%;
+    height: 570px;
+    align-items: center;
+    justify-content: flex-start;
+}
+main div#poster h1 {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 180%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+main div#body {
+    margin: 20px 10px;
+    display: flex;
+}
+img{
+    width: 49%;
+    height: 78%;
+    border-radius: 10px;
+    object-fit: cover;
+}
+main div#avaliacao {
+    margin: 0px 40px;
+    font-style: normal;
+    font-size: 14px;
+}
+main div h2#aval {
+    padding-bottom: 10px;
+    font-size: 200%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+main div h2{
+    padding-top: 10px;
+    padding-left: 10px;
+}
+main div#moviedesc {
+    width: 32%;
+    height: 570px;
+    margin-left: 50px;
+}
+main div h1 {
+    padding: 10px 5px 5px 15px;
+}
+main div#avaliacao h2 {
+    padding-top: 30px;
+}
+main div p {
+    font-weight: normal;
+    padding-left: 20px;
+}
+
+/* Rating Stars */
+.rate {
+    margin: 20px -33px;
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}

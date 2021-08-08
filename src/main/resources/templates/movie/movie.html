@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendação de Filmes</title>
+    <link rel="stylesheet" th:href="@{/css/style_movie.css}">
+    <script type="module" th:src="@{/js/app_movie.js}" defer></script>
+</head>
+<body>
+    <div th:replace="componets/header"></div>
+
+    <main id="main">
+        <div id="poster">
+            <h1 id="title"></h1>
+            <div id="body">
+                <img src="" alt="">
+                <div id="avaliacao">
+                    <h2 id="aval">Avaliação</h2>
+                    <div class="rate">
+                        <input type="radio" id="star10" name="rate" value="10"/>
+                        <label for="star10" title="text">10 stars</label>
+                        <input type="radio" id="star9" name="rate" value="9" />
+                        <label for="star9" title="text">9 stars</label>
+                        <input type="radio" id="star8" name="rate" value="8" />
+                        <label for="star8" title="text">8 stars</label>
+                        <input type="radio" id="star7" name="rate" value="7" />
+                        <label for="star7" title="text">7 stars</label>
+                        <input type="radio" id="star6" name="rate" value="6" />
+                        <label for="star6" title="text">6 stars</label>
+                        <input type="radio" id="star5" name="rate" value="5" />
+                        <label for="star5" title="text">5 stars</label>
+                        <input type="radio" id="star4" name="rate" value="4" />
+                        <label for="star4" title="text">4 stars</label>
+                        <input type="radio" id="star3" name="rate" value="3" />
+                        <label for="star3" title="text">3 stars</label>
+                        <input type="radio" id="star2" name="rate" value="2" />
+                        <label for="star2" title="text">2 stars</label>
+                        <input type="radio" id="star1" name="rate" value="1" />
+                        <label for="star1" title="text">1 star</label>
+                    </div>
+                    <h2 id="user_aval">Sua Avaliação: -</h2>
+                    <h2 id="med">Avaliação média:</h2>
+                    <h2 id="tot">Total de votos:</h2>
+                </div>
+            </div>
+        </div>
+        <div id="moviedesc">
+            <h1>Informações Adicionais</h1>
+            <h2>Titulo original:
+                <p id="tit"></p>
+            </h2>
+            <h2>Data de lançamento:
+                <p id="data"></p>
+            </h2>
+            <h2>Gênero:
+                <p id="gen"></p>
+            </h2>
+            <h2>Duração:
+                <p id="dur"></p>
+            </h2>
+            <h2>Idioma original:
+                <p id="idi"></p>
+            </h2>
+            <h2>Populalidade:
+                <p id="pop"></p>
+            </h2>
+            <h2>País de Produção:
+                <p id="prod"></p>
+            </h2>
+        </div>
+        
+    </main>
+</body>
+</html>

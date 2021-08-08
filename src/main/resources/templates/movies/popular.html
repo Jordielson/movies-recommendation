@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendação de Filmes</title>
+    <link rel="stylesheet" th:href="@{/css/style_popular.css}">
+    <script type="module" th:src="@{/js/app_popular.js}" defer></script>
+</head>
+<body>
+    <div th:replace="componets/header"></div>
+  <!-- Tag principal com os filmes da API -->
+    <main id="main"></main>
+    <div th:replace="componets/footer"></div>
+</body>
+</html>
