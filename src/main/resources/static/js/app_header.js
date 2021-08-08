@@ -1,4 +1,4 @@
-// Informacoes da API que sera usada pelo header
+// Informacoes da API que sera usada pela parte superior das paginas
 const GENREAPI = "https://api.themoviedb.org/3/genre/movie/list?api_key=04c35731a5ee918f014970082a0088b1&language=pt-BR";
 // Selecao dos elementos que serao usados pelo header
 const form = document.getElementById("form");
@@ -46,4 +46,4 @@ function searchMovies(e) {
     }
 }
 
-export const APIKEY = "YOUR APIKEY";
+export const APIKEY = "YOUR API KEY";
