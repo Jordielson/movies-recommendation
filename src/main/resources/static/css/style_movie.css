@@ -33,7 +33,7 @@ main div#poster h1 {
     font-size: 180%;
     font-family: Arial, Helvetica, sans-serif;
 }
-main div#body {
+.body {
     margin: 20px 10px;
     display: flex;
 }
@@ -109,4 +109,30 @@ main div p {
 .rate > input:checked ~ label:hover ~ label,
 .rate > label:hover ~ input:checked ~ label {
     color: #c59b08;
+}
+
+div#div-overview {
+    margin-top: 0;
+    margin-left: 70px;
+    border-radius: 16px;
+    background-color: rgb(241, 241, 241);
+    width: 89%;
+    height: 400px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#div-body-overview {
+    margin: 20px 10px;
+    display: block;
+}
+
+#overview {
+    width: 68%;
+}
+
+#trailer {
+    margin: auto;
+    width: 28%;
+    height: 250px;
 }

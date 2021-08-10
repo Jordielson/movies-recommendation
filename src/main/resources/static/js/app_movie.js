@@ -1,4 +1,5 @@
 import { APIKEY } from "./app_header.js";
+import { getCookie } from "./cookies.js";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -6,13 +7,29 @@ const movieId = urlParams.get('movie_id');
 
 const IMGPATH = "https://image.tmdb.org/t/p/w1280";
 const FINDAPI = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${APIKEY}&language=pt-BR`;
-
 const RECOMMENDAPI = "http://localhost:8080/movies/rate";
-// const main = document.getElementById("main");
+const VIDEOAPI = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${APIKEY}&language=en-US`;
+
+async function getVideo() {
+    let key = await getKey();
+    return `https://www.youtube.com/embed/${key}`;
+}
+
+async function getKey() {
+    let key = "";
+    await fetch(VIDEOAPI).then(res => res.json())
+    .then(function (data) {
+        key = data.results[0].key;
+    });
+    return key;
+
+}
+var userId = getCookie("idUser");
+
 showMovie(FINDAPI);
 function showMovie(url) {
     fetch(url).then(res => res.json())
-    .then(function(data){
+    .then(async function(data){
         const element = document.getElementById("poster");
         const title = document.getElementById("title");
 
@@ -50,17 +67,25 @@ function showMovie(url) {
         const pop = document.getElementById("pop");
         pop.innerText = data.popularity;
 
+        const overview = document.getElementById("overview");
+        overview.innerText = data.overview;
+
         const prod = document.getElementById("prod");
         data.production_countries.forEach(element => {
             prod.innerText += ", " + element.name;
         });
         prod.innerText = prod.innerText.substring(2);
 
+        const trailer = document.getElementById("trailer");
+        trailer.src = await getVideo();
+        
         const rad = document.getElementsByName("rate");
         rad.forEach(elemnt => {
             elemnt.addEventListener("click", rating);
         });
-        initRating(RECOMMENDAPI + `?movie_id=${movieId}&user_id=${2}`);
+        if(userId != "") {
+            initRating(RECOMMENDAPI + `?movie_id=${movieId}&user_id=${userId}`);
+        }
     });
 }
 
@@ -68,7 +93,6 @@ function initRating(url) {
     fetch(url).then((res) => res.json())
     .then(function(data){
             let rating = 0;
-            console.log(rating);
             rating = data.rating;
             if (rating > 0) {
                 const aval = document.getElementById("user_aval");
@@ -82,24 +106,34 @@ function initRating(url) {
     });
 }
 function rating() {
-    const rad = document.getElementsByName("rate");
-    const aval = document.getElementById("user_aval");
-    rad.forEach(elemnt => {
-        if (elemnt.checked) {
-            user_aval.innerText = "Sua Avaliação: " + elemnt.value;
-            let user = {
-                "movieId": movieId,
-                "userId": 2,
-                "rating": elemnt.value
-            };
-            postRating(user);
-        }
-    });
+    if (userId != "") {
+        const rad = document.getElementsByName("rate");
+        const aval = document.getElementById("user_aval");
+        rad.forEach(elemnt => {
+            if (elemnt.checked) {
+                user_aval.innerText = "Sua Avaliação: " + elemnt.value;
+                let userRating = {
+                    "movieId": movieId,
+                    "userId": userId,
+                    "rating": elemnt.value
+                };
+                postRating(userRating);
+            }
+        });
+    } else {
+        const rad = document.getElementsByName("rate");
+        rad.forEach(element =>
+            element.checked = false);
+        window.alert("Faça login para poder avaliar os filmes");
+    }
 }
 
-function postRating(user) {
-    let request = new XMLHttpRequest();
-    request.open("POST", RECOMMENDAPI, true);
-    request.setRequestHeader("Content-Type", "application/json")
-    request.send(JSON.stringify(user));
+async function postRating(userRating) {
+    await fetch(RECOMMENDAPI, {
+        method: "POST",
+        body: JSON.stringify(userRating),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    });
 }

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,18 +49,21 @@ public class RateController {
 		if(!rateO.isPresent()) {
 			return new ResponseEntity<Rate>(HttpStatus.NOT_FOUND);
 		} else {
-			rateO.get().add(linkTo(methodOn(RateController.class).getAll()).withRel("Users list"));
+			rateO.get().add(linkTo(methodOn(RateController.class).getAll()).withRel("Rates list"));
 			return new ResponseEntity<Rate>(rateO.get(), HttpStatus.OK);
 		}
 	}
 	
 	@GetMapping("/rate/recommend/{userId}")
-	public ResponseEntity<List<Integer>> getMoviesRecommed(@PathVariable(value = "userId") int userId){
+	public ResponseEntity<Page<Integer>> getMoviesRecommed(@PathVariable(value = "userId") int userId, Pageable pageable){
 		List<Rate> ratingsUser = rateRepository.findAllMoviesByUserId(userId);
 		List<Rate> ratings = rateRepository.findAllMoviesCompare(userId);
 		Knn knn = new Knn();
 		List<Integer> recommends = knn.recommned(ratings, ratingsUser);
-		return new ResponseEntity<List<Integer>>(recommends, HttpStatus.OK);
+		final int start = (int)pageable.getOffset();
+		final int end = Math.min((start + pageable.getPageSize()), recommends.size());
+		final Page<Integer> page = new PageImpl<>(recommends.subList(start, end), pageable, recommends.size());
+		return new ResponseEntity<Page<Integer>>(page, HttpStatus.OK);
 	}
 	
 	@PostMapping("/rate")

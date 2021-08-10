@@ -11,10 +11,7 @@ adicionando-os na tela home dentro da tag main. */
 export default function showMovies(url, page){
     fetch(url).then(res => res.json())
     .then(function(data){
-        if (data.total_pages == page) {
-            const load = document.getElementById("load");
-            load.parentNode.removeChild(load);
-        }
+        removeLoad(data.total_pages, page);
         data.results.forEach(element => {
             showMovie(element)
         }); 
@@ -37,4 +34,11 @@ export function showMovie(element) {
     a.appendChild(text);
     elemnt.appendChild(a);
     main.appendChild(elemnt);
+}
+
+export function removeLoad(total_pages, page) {
+    if(total_pages == page) {
+        const load = document.getElementById("load");
+        load.parentNode.removeChild(load);
+    }
 }
