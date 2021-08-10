@@ -1,3 +1,5 @@
+import {createCookie, getCookie} from "./cookies.js";
+
 // Informacoes da API que sera usada pela parte superior das paginas
 const GENREAPI = "https://api.themoviedb.org/3/genre/movie/list?api_key=04c35731a5ee918f014970082a0088b1&language=pt-BR";
 // Selecao dos elementos que serao usados pelo header
@@ -45,5 +47,19 @@ function searchMovies(e) {
         document.location.href = "/movies/search?search_term=" + searchTerm;
     }
 }
+
+let userId = getCookie("idUser");
+if (userId != "") {
+    let login = document.getElementById("id-get-user-login");
+    login.addEventListener("click", function (e) {
+        createCookie();
+    });
+    login.innerText = "Sair"
+    login.href = "/movies/home";
+
+    let regis = document.getElementById("id-get-user-register");
+    regis.innerText = "Alterar meus dados";
+}
+
 
 export const APIKEY = "YOUR API KEY";

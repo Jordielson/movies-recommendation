@@ -1,9 +1,8 @@
-import {createCookie, getCookie, alterCookiesUser} from "./cookies.js";
+import {getCookie, alterCookiesUser} from "./cookies.js";
 
 const APIUSER = "http://localhost:8080/movies/user";
 
 // Elementos que serao usados
-const form = document.getElementById("form-register");
 const btnAlter = document.getElementById("btn-alter");
 const submit = document.getElementById("button");
 const nameUser = document.getElementById("name");
@@ -81,7 +80,6 @@ function initUser(id = "") {
         getUser(idUser);
     } else {
         btnAlter.classList.add("hidden");
-        createCookie();
         registerUser();
     }
 }

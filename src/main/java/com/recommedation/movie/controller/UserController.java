@@ -26,7 +26,7 @@ public class UserController {
 	@Autowired
 	UserRepository userRepository;
 	
-	@GetMapping("/user")
+	@GetMapping("/users")
 	public ResponseEntity<List<User>> getAll(){
 		List<User> users = userRepository.findAll();
 		for (User u : users) {
@@ -66,5 +66,16 @@ public class UserController {
 	@PutMapping("/user")
 	public ResponseEntity<User> updateUser(@RequestBody User user) {
 		return new ResponseEntity<User>(userRepository.save(user), HttpStatus.OK);
+	}
+
+	@GetMapping("/users/{email}")
+	public ResponseEntity<User> getUser(@PathVariable(value="email") String email) {
+		User u = userRepository.findUserByEmail(email);
+		if(! (u != null)) {
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+		} else {
+			u.add(linkTo(methodOn(UserController.class).getAll()).withRel("Users list"));
+			return new ResponseEntity<User>(u, HttpStatus.OK);
+		}
 	}
 }

@@ -34,4 +34,8 @@ public class PageController {
     public String register() {
         return "register/register";
     }
+    @GetMapping("/movies/login")
+    public String login() {
+        return "login/login";
+    }
 }
