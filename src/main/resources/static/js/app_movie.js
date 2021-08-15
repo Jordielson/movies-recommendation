@@ -76,8 +76,12 @@ function showMovie(url) {
         });
         prod.innerText = prod.innerText.substring(2);
 
-        const trailer = document.getElementById("trailer");
-        trailer.src = await getVideo();
+        try {
+            const trailer = document.getElementById("trailer");
+            trailer.src = await getVideo();
+        } catch (error) {
+            console.log("Video not found");
+        }
         
         const rad = document.getElementsByName("rate");
         rad.forEach(elemnt => {
