@@ -3,75 +3,64 @@ package com.recommedation.movie.recommend;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.recommedation.movie.model.Rate;
 
 public class Knn {
-	private List<MovieDis> movieDisList;
 	
-	public List<Integer> recommned(List<Rate> sample, List<Rate> moviesUser) {
-		movieDisList = new ArrayList<MovieDis>();
-		for (int i = 0; i < moviesUser.size(); i++) {
-			calculeDistance(sample, moviesUser.get(i));
+	public List<Integer> findNeighbors(List<Rate> moviesUser, List<Rate> moviesCommom) {
+		List<UserDis> userDisList = calculeDistance(moviesCommom, moviesUser);
+
+		Collections.sort(userDisList);
+		for (UserDis userDis : userDisList) {
+			System.out.println("User " + userDis.getIdUser() + "; distance " + userDis.getDistance());
 		}
-		sort(movieDisList);
-		List<Integer> movieDisListUnique = new ArrayList<Integer>();
-		for (int i = 0; i < movieDisList.size(); i++) {
-			MovieDis movieDis = movieDisList.get(i);
-			if(! movieDisListUnique.contains(movieDis.getIdMovie())) {
-				movieDisListUnique.add(movieDis.getIdMovie());
-			}
+		int k = 5;
+		if(userDisList.size() > k) {
+			userDisList = userDisList.subList(0, k);
 		}
-		for (int i = 0; i < moviesUser.size(); i++) {
-			Integer id = moviesUser.get(i).getMovieId();
-			if(movieDisListUnique.contains(id)) {
-				movieDisListUnique.remove(id);
-			}
+
+		List<Integer> neighbors = new ArrayList<>();
+		for (UserDis dis : userDisList) {
+			neighbors.add(dis.getIdUser());
 		}
-		return movieDisListUnique;
+		return neighbors;
 	}
  
-	private void calculeDistance(List<Rate> sample, Rate movie) {
-		int length = sample.size();
+	private List<UserDis> calculeDistance(List<Rate> moviesCommom, List<Rate> moviesUser) {
+		Map<Integer,UserDis> userDisList = new HashMap<>();
 
-		for (int i = 0; i < length; i++) {
-			Rate mv = sample.get(i);
-			double distances = getDistance(mv, movie);
-			MovieDis movieDis = new MovieDis(mv.getMovieId(), mv.getUserId(), mv.getRating(), distances);
-			movieDisList.add(movieDis);
-		}
-	}
-	
-	public void sort(List<MovieDis> movieDisList) {
-		Collections.sort(movieDisList, new Comparator<MovieDis>() {
-			 
-			@Override
-			public int compare(MovieDis o1, MovieDis o2) {
-				double sub = (o1.getDistance() - o2.getDistance());
-				if (sub == 0) {
-					return 0;
-				}
-				if (sub > 0) {
-					return 1;
-				}
-				return -1;
+		for (int i = 0; i < moviesCommom.size(); i++) {
+			Rate mv = moviesCommom.get(i);
+			int userId = mv.getUserId();
+
+			if(! userDisList.containsKey(userId)) {
+				userDisList.put(userId, new UserDis(userId));
 			}
-		});
-		
-		int k=5;
-		movieDisList=movieDisList.subList(0,k);
+
+			Rate movie = moviesUser.stream()
+				.filter(rate -> mv.getMovieId() == rate.getMovieId())
+				.findAny()
+				.orElse(null);
+			
+			double distances = getDistance(mv, movie);
+			userDisList.get(userId).addDistance(distances);
+		}
+		return new ArrayList<UserDis>(userDisList.values());
 	}
 	
 	public double getDistance(Rate movie1, Rate movie2) {
-		double[] ps1 = { movie1.getRating(), movie1.getRating()};
-		double[] ps2 = { movie2.getRating(), movie2.getRating()};
-		return getDistance(ps1, ps2);
+		double[] ps1 = { movie1.getRating()};
+		double[] ps2 = { movie2.getRating()};
+		return calculeEuclidianDistance(ps1, ps2);
 	}
- 
-	public double getDistance(double[] ps1, double[] ps2) {
+
+	public double calculeEuclidianDistance(double[] ps1, double[] ps2) {
 		if (ps1.length != ps1.length) {
-			 throw new RuntimeException("The number of attributes does not correspond");
+			 throw new RuntimeException("Parameters does not correspond");
 		}
 		int length = ps1.length;
 		double total = 0;
@@ -81,5 +70,21 @@ public class Knn {
 		}
 		return Math.sqrt(total);
 	}
+
+	public void sort(List<Rate> userDisList) {
+		Collections.sort(userDisList, new Comparator<Rate>() {
  
+			@Override
+			public int compare(Rate o1, Rate o2) {
+				double sub = (o1.getUserId() - o2.getUserId());
+				if (sub == 0) {
+					return 0;
+				}
+				if (sub > 0) {
+					return 1;
+				}
+				return -1;
+			}
+		});
+	}
 }

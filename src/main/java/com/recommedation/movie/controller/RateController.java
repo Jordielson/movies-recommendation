@@ -57,9 +57,28 @@ public class RateController {
 	@GetMapping("/rate/recommend/{userId}")
 	public ResponseEntity<Page<Integer>> getMoviesRecommed(@PathVariable(value = "userId") int userId, Pageable pageable){
 		List<Rate> ratingsUser = rateRepository.findAllMoviesByUserId(userId);
-		List<Rate> ratings = rateRepository.findAllMoviesCompare(userId);
-		Knn knn = new Knn();
-		List<Integer> recommends = knn.recommned(ratings, ratingsUser);
+		List<Rate> ratingsMoviesCommom = rateRepository.findAllMoviesCommom(userId);
+
+		if(ratingsMoviesCommom.size() > 0) {
+			Knn knn = new Knn();
+			List<Integer> neighbors = knn.findNeighbors(ratingsUser, ratingsMoviesCommom);
+	
+			List<Integer> recommends = rateRepository.findMoviesRecommends(userId, neighbors);
+	
+			final int start = (int)pageable.getOffset();
+			final int end = Math.min((start + pageable.getPageSize()), recommends.size());
+			final Page<Integer> page = new PageImpl<>(recommends.subList(start, end), pageable, recommends.size());
+			return new ResponseEntity<Page<Integer>>(page, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+	}
+
+	@GetMapping("/rate/recommend")
+	public ResponseEntity<Page<Integer>> moviesRecommed(Pageable pageable) {
+		List<Integer> recommends = rateRepository.moviesRecommends();
+
 		final int start = (int)pageable.getOffset();
 		final int end = Math.min((start + pageable.getPageSize()), recommends.size());
 		final Page<Integer> page = new PageImpl<>(recommends.subList(start, end), pageable, recommends.size());
