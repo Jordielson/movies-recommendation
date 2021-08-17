@@ -11,13 +11,10 @@ import com.recommedation.movie.model.Rate;
 
 public class Knn {
 	
-	public List<Integer> findNeighbors(List<Rate> moviesUser, List<Rate> moviesCommom) {
+	public static List<Integer> findNeighbors(List<Rate> moviesUser, List<Rate> moviesCommom) {
 		List<UserDis> userDisList = calculeDistance(moviesCommom, moviesUser);
 
 		Collections.sort(userDisList);
-		for (UserDis userDis : userDisList) {
-			System.out.println("User " + userDis.getIdUser() + "; distance " + userDis.getDistance());
-		}
 		int k = 5;
 		if(userDisList.size() > k) {
 			userDisList = userDisList.subList(0, k);
@@ -30,7 +27,7 @@ public class Knn {
 		return neighbors;
 	}
  
-	private List<UserDis> calculeDistance(List<Rate> moviesCommom, List<Rate> moviesUser) {
+	private static List<UserDis> calculeDistance(List<Rate> moviesCommom, List<Rate> moviesUser) {
 		Map<Integer,UserDis> userDisList = new HashMap<>();
 
 		for (int i = 0; i < moviesCommom.size(); i++) {
@@ -52,13 +49,13 @@ public class Knn {
 		return new ArrayList<UserDis>(userDisList.values());
 	}
 	
-	public double getDistance(Rate movie1, Rate movie2) {
+	public static double getDistance(Rate movie1, Rate movie2) {
 		double[] ps1 = { movie1.getRating()};
 		double[] ps2 = { movie2.getRating()};
 		return calculeEuclidianDistance(ps1, ps2);
 	}
 
-	public double calculeEuclidianDistance(double[] ps1, double[] ps2) {
+	public static double calculeEuclidianDistance(double[] ps1, double[] ps2) {
 		if (ps1.length != ps1.length) {
 			 throw new RuntimeException("Parameters does not correspond");
 		}
@@ -71,7 +68,7 @@ public class Knn {
 		return Math.sqrt(total);
 	}
 
-	public void sort(List<Rate> userDisList) {
+	public static void sort(List<Rate> userDisList) {
 		Collections.sort(userDisList, new Comparator<Rate>() {
  
 			@Override

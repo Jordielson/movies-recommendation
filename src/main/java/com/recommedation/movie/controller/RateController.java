@@ -60,8 +60,7 @@ public class RateController {
 		List<Rate> ratingsMoviesCommom = rateRepository.findAllMoviesCommom(userId);
 
 		if(ratingsMoviesCommom.size() > 0) {
-			Knn knn = new Knn();
-			List<Integer> neighbors = knn.findNeighbors(ratingsUser, ratingsMoviesCommom);
+			List<Integer> neighbors = Knn.findNeighbors(ratingsUser, ratingsMoviesCommom);
 	
 			List<Integer> recommends = rateRepository.findMoviesRecommends(userId, neighbors);
 	
@@ -70,9 +69,8 @@ public class RateController {
 			final Page<Integer> page = new PageImpl<>(recommends.subList(start, end), pageable, recommends.size());
 			return new ResponseEntity<Page<Integer>>(page, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.SEE_OTHER);
 		}
-		
 	}
 
 	@GetMapping("/rate/recommend")
