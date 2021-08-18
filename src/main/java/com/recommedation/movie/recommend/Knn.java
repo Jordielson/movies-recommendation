@@ -2,7 +2,6 @@ package com.recommedation.movie.recommend;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ public class Knn {
 		}
 		return neighbors;
 	}
- 
+
 	private static List<UserDis> calculeDistance(List<Rate> moviesCommom, List<Rate> moviesUser) {
 		Map<Integer,UserDis> userDisList = new HashMap<>();
 
@@ -55,33 +54,17 @@ public class Knn {
 		return calculeEuclidianDistance(ps1, ps2);
 	}
 
-	public static double calculeEuclidianDistance(double[] ps1, double[] ps2) {
-		if (ps1.length != ps1.length) {
+	public static double calculeEuclidianDistance(double[] p, double[] q) {
+		if (p.length != p.length) {
 			 throw new RuntimeException("Parameters does not correspond");
 		}
-		int length = ps1.length;
+
+		int length = p.length;
 		double total = 0;
 		for (int i = 0; i < length; i++) {
-			double sub = ps1[i] - ps2[i];
+			double sub = p[i] - q[i];
 			total = total + (sub * sub);
 		}
 		return Math.sqrt(total);
-	}
-
-	public static void sort(List<Rate> userDisList) {
-		Collections.sort(userDisList, new Comparator<Rate>() {
- 
-			@Override
-			public int compare(Rate o1, Rate o2) {
-				double sub = (o1.getUserId() - o2.getUserId());
-				if (sub == 0) {
-					return 0;
-				}
-				if (sub > 0) {
-					return 1;
-				}
-				return -1;
-			}
-		});
 	}
 }

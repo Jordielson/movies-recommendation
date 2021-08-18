@@ -63,11 +63,8 @@ public class RateController {
 			List<Integer> neighbors = Knn.findNeighbors(ratingsUser, ratingsMoviesCommom);
 	
 			List<Integer> recommends = rateRepository.findMoviesRecommends(userId, neighbors);
-	
-			final int start = (int)pageable.getOffset();
-			final int end = Math.min((start + pageable.getPageSize()), recommends.size());
-			final Page<Integer> page = new PageImpl<>(recommends.subList(start, end), pageable, recommends.size());
-			return new ResponseEntity<Page<Integer>>(page, HttpStatus.OK);
+			
+			return new ResponseEntity<Page<Integer>>(createPage(pageable, recommends), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.SEE_OTHER);
 		}
@@ -75,12 +72,16 @@ public class RateController {
 
 	@GetMapping("/rate/recommend")
 	public ResponseEntity<Page<Integer>> moviesRecommed(Pageable pageable) {
-		List<Integer> recommends = rateRepository.moviesRecommends();
+		List<Integer> moviesRecommends = rateRepository.moviesRecommends();
 
+		return new ResponseEntity<Page<Integer>>(createPage(pageable, moviesRecommends), HttpStatus.OK);
+	}
+
+	public Page<Integer> createPage(Pageable pageable, List<Integer> list) {
 		final int start = (int)pageable.getOffset();
-		final int end = Math.min((start + pageable.getPageSize()), recommends.size());
-		final Page<Integer> page = new PageImpl<>(recommends.subList(start, end), pageable, recommends.size());
-		return new ResponseEntity<Page<Integer>>(page, HttpStatus.OK);
+		final int end = Math.min((start + pageable.getPageSize()), list.size());
+		final Page<Integer> page = new PageImpl<>(list.subList(start, end), pageable, list.size());
+		return page;
 	}
 	
 	@PostMapping("/rate")
