@@ -13,3 +13,8 @@ footer div {
     padding-top: 10px;
     color: #fff;
 }
+
+.hidden {
+    visibility: hidden;
+    display: none;
+}

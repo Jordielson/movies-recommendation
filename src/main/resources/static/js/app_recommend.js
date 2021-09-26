@@ -1,5 +1,5 @@
 import { APIKEY } from "./app_header.js";
-import { showMovie, removeLoad } from "./show_movie.js";
+import { showMovie, updateLoad } from "./show_movie.js";
 import { getCookie } from "./cookies.js";
 
 var userId = getCookie("idUser");
@@ -24,6 +24,7 @@ async function showRecommends(page = 0) {
     try {
         await getRecommends(getUrlApiRecommend(page));
     } catch (error) {
+        console.log("Test");
         getRecommends(APIRECOMMEND + `?page=${page}`);                
     }
 }
@@ -32,7 +33,7 @@ async function getRecommends(url) {
     await fetch(url)
     .then(res => res.json())
     .then(function(data){
-        removeLoad(data.totalPages-1, page);
+        updateLoad(data.totalPages-1, page);
         data.content.forEach(element => {
             const url = getUrlApi(element);
             fetch(url).then(res => res.json())
@@ -40,5 +41,9 @@ async function getRecommends(url) {
                 showMovie(elemnt);
             });
         });
+        if(data.totalPages == 0){
+            const text = document.getElementById("info");
+            text.innerText = "Não há nenhum filme bem avaliado pelos outros usuários";
+        }
     });
 }
