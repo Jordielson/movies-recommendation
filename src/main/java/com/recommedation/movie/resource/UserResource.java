@@ -1,7 +1,6 @@
-package com.recommedation.movie.controller;
+package com.recommedation.movie.resource;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -18,63 +17,63 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.recommedation.movie.model.User;
-import com.recommedation.movie.repository.UserRepository;
+import com.recommedation.movie.service.UserService;
+import com.recommedation.movie.utils.Login;
 
 @RestController
 @RequestMapping(value = "/movies")
-public class UserController {
+public class UserResource {
 	@Autowired
-	UserRepository userRepository;
+	UserService userService;
 	
 	@GetMapping("/users")
 	public ResponseEntity<List<User>> getAll(){
-		List<User> users = userRepository.findAll();
+		List<User> users = userService.findAll();
 		for (User u : users) {
 			int id = u.getId();
-			u.add(linkTo(methodOn(UserController.class).getUser(id)).withSelfRel());
+			u.add(linkTo(methodOn(UserResource.class).getUser(id)).withSelfRel());
 		}
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
 	
 	@GetMapping("/user/{id}")
 	public ResponseEntity<User> getUser(@PathVariable(value="id") int id) {
-		Optional<User> userO = userRepository.findById(id);
-		if(!userO.isPresent()) {
+		User user = userService.findById(id);
+		if(user == null) {
 			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		} else {
-			userO.get().add(linkTo(methodOn(UserController.class).getAll()).withRel("Users list"));
-			return new ResponseEntity<User>(userO.get(), HttpStatus.OK);
+			user.add(linkTo(methodOn(UserResource.class).getAll()).withRel("Users list"));
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 	}
 	
 	@PostMapping("/user")
 	public ResponseEntity<User> saveUser(@RequestBody User user) {
-		return new ResponseEntity<User>(userRepository.save(user), HttpStatus.CREATED);
+		return new ResponseEntity<User>(userService.save(user), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/user/{id}")
 	public ResponseEntity<?> deleteUser(@PathVariable(value="id") int id) {
-		Optional<User> userO = userRepository.findById(id);
-		if(!userO.isPresent()) {
+		User user = userService.findById(id);
+		if(user == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			userRepository.delete(userO.get());
+			userService.delete(user);
 			return new ResponseEntity<>(HttpStatus.OK);		
 		}
 	}
 	
 	@PutMapping("/user")
 	public ResponseEntity<User> updateUser(@RequestBody User user) {
-		return new ResponseEntity<User>(userRepository.save(user), HttpStatus.OK);
+		return new ResponseEntity<User>(userService.save(user), HttpStatus.OK);
 	}
 
-	@GetMapping("/users/{email}")
-	public ResponseEntity<User> getUser(@PathVariable(value="email") String email) {
-		User u = userRepository.findUserByEmail(email);
-		if(! (u != null)) {
-			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+	@PostMapping("/user/login")
+	public ResponseEntity<?> login(@RequestBody Login data) {
+		User u = userService.login(data.getEmail(), data.getPassword());
+		if(u == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email nao cadastrado ou Senha invalida!");
 		} else {
-			u.add(linkTo(methodOn(UserController.class).getAll()).withRel("Users list"));
 			return new ResponseEntity<User>(u, HttpStatus.OK);
 		}
 	}

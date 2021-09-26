@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" th:href="@{/css/style_register.css}">
+    <script type="module" th:src="@{/js/app_register.js}" defer></script>
+</head>
+<body>
+    <div th:replace="componets/header"></div>
+    <div id="main">
+        <h1 id="h1-title"></h1>
+        <form id="form-register" action="">
+            <div class="box">
+                <label for="name">Nome</label>
+                <input class="register" type="text" id="name" placeholder="Nome">
+            </div>
+            <div class="box">
+                <label for="email">Email</label>
+                <input class="register" type="email" id="email" placeholder="Email">
+            </div>
+            <div id="div-old-password" class="box hidden">
+                <label for="password-old">Senha Antiga</label>
+                <input class="register" type="password" id="password-old" placeholder="Senha">
+            </div>
+            <div id="div-new-password" class="box">
+                <label for="password-new" id="lb-password">Senha</label>
+                <input class="register" type="password" id="password-new" placeholder="Senha">
+            </div>
+            <div id="div-password" class="box">
+                <label for="password-confirm">Confirmar Senha</label>
+                <input class="register" type="password" id="password-confirm" placeholder="Senha">
+            </div>
+            <div class="box">
+                <input class="register" type="submit" id="button" placeholder="Cadastrar">
+            </div>
+            <div class="box">
+                <p class="register" id="btn-alter" placeholder="Alterar Senha">Alterar Senha</p>
+            </div>
+        </form>
+    </div>
+    <p class="error-data template"></p>
+</body>
+</html>

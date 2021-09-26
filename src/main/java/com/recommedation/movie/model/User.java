@@ -18,11 +18,11 @@ public class User extends RepresentationModel<User> implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column
+	@Column(length = 100)
 	private String name;
-	@Column
+	@Column(length = 100)
 	private String email;
-	@Column
+	@Column(length = 30)
 	private String password;
 	
 	public User() {

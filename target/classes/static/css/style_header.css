@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header{
+    width: 100%;
+    height: 50px;
+    padding-left: 30px;
+    background: rgb(87, 88, 87);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid #ccc;
+}
+header h1{
+    font: bold 24px Arial;
+    margin: 0 20px;
+    padding-right: 30px;
+    width: 350px;
+    color: #fff;
+}
+header h2 {
+    font: bold 20px Arial;
+    margin: 0 20px;
+    color: #fff;
+}
+header a {
+    text-decoration: none;
+}
+header form{
+    padding-left: 120px;
+    display: flex;
+    align-items: center;
+}
+#search{
+    width: 350px;
+    height: 30px;
+    border: 1px solid black;
+    outline: none;
+    border-radius: 10px;
+    padding-left: 10px;
+}
+body {
+    font-family: "Arial", Serif;
+}
+.navbar {
+    overflow: hidden;
+}
+.navbar a{
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+}
+
+.navbar a:hover{
+    background-color: #ddd;
+    color: #000;
+}
+
+body div#side-menu{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(247, 245, 245);
+    opacity: 0.9;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+
+body div#side-menu a{
+    padding: 10px 10px 10px 30px;
+    text-decoration: none;
+    font-size: 16x;
+    color: rgb(14, 14, 14);
+    display: block;
+    transition: 0.3s;
+}
+
+body div#side-menu a:hover{
+    color: black;
+}
+
+body div#side-menu .btn-close{
+    position: absolute;
+    top: 0;
+    right: 22px;
+    font-size: 36px;
+    margin-left: 50px;
+}

@@ -1,0 +1,42 @@
+<!-- Hearder padrao para todas as paginas -->
+<link rel="stylesheet" th:href="@{/css/style_header.css}">
+<script type="module" th:src="@{/js/app_header.js}" defer></script>
+<header>
+    <nav class="navbar">
+        <span class="open-slide">
+            <a href="#" id="open-side-menu">
+                <svg width="30" height="30">
+                    <path d="M0,5 30,5" stroke="#fff"
+                    stroke-width="5"/>
+                    <path d="M0,14 30,14" stroke="#fff"
+                    stroke-width="5"/>
+                    <path d="M0,23 30,23" stroke="#fff"
+                    stroke-width="5"/>    
+                </svg>
+            </a>
+        </span>
+    </nav>
+    <a href="/movies/home"></a><h1>Sugestão de Filmes</h1></a>
+    <a href="/movies/home"><h2>Home</h2></a>
+    <a href="/movies/popular"><h2>Popular</h2></a>
+    <a href="/movies/recommends"><h2>Recomendações</h2></a>
+    <form id="form">
+        <input
+            type="text"
+            id="search"
+            placeholder="Pesquisar"
+            class="search"
+        />
+    </form>
+</header>
+
+<body>
+    <div id="side-menu" class="side-nav">
+        <a href="#" class="btn-close" id="close-side-menu">&times;</a>
+        <a href="/movies/home">Home</a>
+        <a id="id-get-user-login" href="/movies/login">Login</a>
+        <a id="id-get-user-register" href="/movies/register">Cadastrar</a>
+        <a href="/movies/popular">Popular</a>
+        <a href="/movies/recommends">Recomendações</a>
+    </div>
+</body>
