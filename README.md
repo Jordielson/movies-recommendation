@@ -16,17 +16,17 @@ Neste projeto usamos as informações dos filmes que estão base do The Movie Da
 
 ## Apresentação
   <p align="center" >
-    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/login.png" width="480" height="240">
-    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/sign_up.png" width="480" height="240">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/login.png" width="48%" height="24%">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/sign_up.png" width="48%" height="24%">
   </p>
   
   <p align="center" >
-    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/page_popularity.png" width="480" height="240">
-    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/search.png" width="480" height="240">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/page_popularity.png" width="48%" height="24%">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/search.png" width="48%" height="24%">
   </p>
   
   <p align="center" >
-    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/movie_description.png" width="480" height="240">
-    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/trailer-synopsis.png" width="480" height="240">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/movie_description.png" width="48%" height="24%">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/trailer-synopsis.png" width="48%" height="24%">
   </p>
           
