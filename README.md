@@ -13,3 +13,20 @@ Neste projeto usamos as informações dos filmes que estão base do The Movie Da
   - Adcionar a senha do mysql em movies-recommendation/src/main/resources/application.properties 
   - Iniciar movies-recommendation/src/main/java/com/recommedation/movie/Application.java 
   - Abrir seu navegador e acessar http://localhost:8080/movies/home
+
+## Apresentação
+  <p align="center" >
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/login.png" width="480" height="240">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/sign_up.png" width="480" height="240">
+  </p>
+  
+  <p align="center" >
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/page_popularity.png" width="480" height="240">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/search.png" width="480" height="240">
+  </p>
+  
+  <p align="center" >
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/movie_description.png" width="480" height="240">
+    <img src="https://github.com/Jordielson/movies-recommendation/blob/master/images/trailer-synopsis.png" width="480" height="240">
+  </p>
+          
