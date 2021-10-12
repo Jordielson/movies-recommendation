@@ -1,12 +1,9 @@
 package com.recommedation.movie.resource;
 
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 import com.recommedation.movie.model.User;
 import com.recommedation.movie.service.UserService;
-import com.recommedation.movie.utils.Login;
 
 @RestController
 @RequestMapping(value = "/movies")
@@ -26,30 +25,23 @@ public class UserResource {
 	@Autowired
 	UserService userService;
 	
-	@GetMapping("/users")
-	public ResponseEntity<List<User>> getAll(){
-		List<User> users = userService.findAll();
-		for (User u : users) {
-			int id = u.getId();
-			u.add(linkTo(methodOn(UserResource.class).getUser(id)).withSelfRel());
-		}
-		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-	}
-	
-	@GetMapping("/user/{id}")
-	public ResponseEntity<User> getUser(@PathVariable(value="id") int id) {
-		User user = userService.findById(id);
+	@GetMapping("/user")
+	public ResponseEntity<User> getUserAuth(@AuthenticationPrincipal User user) {
 		if(user == null) {
-			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
 		} else {
-			user.add(linkTo(methodOn(UserResource.class).getAll()).withRel("Users list"));
-			return new ResponseEntity<User>(user, HttpStatus.OK);
+			return new ResponseEntity<User>(userService.findById(user.getId()), HttpStatus.OK);
 		}
 	}
 	
 	@PostMapping("/user")
-	public ResponseEntity<User> saveUser(@RequestBody User user) {
-		return new ResponseEntity<User>(userService.save(user), HttpStatus.CREATED);
+	public ResponseEntity<?> registrationUser(@RequestBody User user) {
+		Object obj = userService.save(user);
+		if(obj instanceof User) {
+			return new ResponseEntity<User>(((User) obj), HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@DeleteMapping("/user/{id}")
@@ -64,15 +56,13 @@ public class UserResource {
 	}
 	
 	@PutMapping("/user")
-	public ResponseEntity<User> updateUser(@RequestBody User user) {
-		return new ResponseEntity<User>(userService.save(user), HttpStatus.OK);
-	}
-
-	@PostMapping("/user/login")
-	public ResponseEntity<?> login(@RequestBody Login data) {
-		User u = userService.login(data.getEmail(), data.getPassword());
+	@ResponseBody
+	public ResponseEntity<User> updateUser(@RequestBody Map<String, String> json) {
+		String oldPassword = json.get("oldPassword");
+		User user = new User(Integer.parseInt(json.get("id")), json.get("name"), json.get("email"), json.get("password"));
+		User u = userService.update(user, oldPassword);
 		if(u == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email nao cadastrado ou Senha invalida!");
+			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
 		} else {
 			return new ResponseEntity<User>(u, HttpStatus.OK);
 		}

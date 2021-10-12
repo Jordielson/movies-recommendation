@@ -1,15 +1,13 @@
 import { APIKEY } from "./app_header.js";
 import { showMovie, updateLoad } from "./show_movie.js";
-import { getCookie } from "./cookies.js";
 
-var userId = getCookie("idUser");
 const APIRECOMMEND = "http://localhost:8080/movies/rate/recommend";
 
 function getUrlApi(movieId) {
     return `https://api.themoviedb.org/3/movie/${movieId}?api_key=${APIKEY}&language=pt-BR`;
 }
 function getUrlApiRecommend(page) {
-    return `${APIRECOMMEND}/${userId}?page=${page}`;
+    return `${APIRECOMMEND}?page=${page}`;
 }
 
 var page = 0;
@@ -24,7 +22,7 @@ async function showRecommends(page = 0) {
     try {
         await getRecommends(getUrlApiRecommend(page));
     } catch (error) {
-        console.log("Test");
+        console.log("Error: " + error);
         getRecommends(APIRECOMMEND + `?page=${page}`);                
     }
 }

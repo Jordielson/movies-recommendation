@@ -1,7 +1,4 @@
-import {createCookie, getCookie} from "./cookies.js";
-
-
-export const APIKEY = "YOUR_API_KEY";
+export const APIKEY = "YOUR API KEY";
 
 
 // Informacoes da API que sera usada pela parte superior das paginas
@@ -18,7 +15,7 @@ function showGenre(url){
     data.genres.forEach(element => {
         const a = document.createElement("a");
         a.innerText = element.name;
-        a.href = "/movies/genre?genre_id=" + element.id;
+        a.href = "/movies-recommendation/genre?genre_id=" + element.id;
         sideMenu.appendChild(a);
         }); 
     });
@@ -48,19 +45,36 @@ function searchMovies(e) {
     /* Adiciona o valor da pesquisa na url da API para fazer a busca. */
     if (searchTerm) {
         search.value = "";
-        document.location.href = "/movies/search?search_term=" + searchTerm;
+        document.location.href = "/movies-recommendation/search?search_term=" + searchTerm;
     }
 }
 
-let userId = getCookie("idUser");
-if (userId != "") {
-    let login = document.getElementById("id-get-user-login");
-    login.addEventListener("click", function (e) {
-        createCookie();
-    });
-    login.innerText = "Sair"
-    login.href = "/movies/home";
+const GETUSER = "http://localhost:8080/movies/user";
 
-    let regis = document.getElementById("id-get-user-register");
-    regis.innerText = "Alterar meus dados";
+getUser();
+export async function getUser() {
+    return await fetch(GETUSER).then((res) => res.json())
+    .then(function(data){
+        updateUser(data);
+        return data;
+    })
+    .catch((error) => {
+        console.log("Error: " + error);
+    })
+} 
+
+function updateUser(data) {
+    if (data != null) {
+        let login = document.getElementById("id-get-user-login");
+        login.addEventListener("click", function (e) {
+            fetch("http://localhost:8080/movies-recommendation/logout", {
+                method: "POST"
+            })
+        });
+        login.innerText = "Sair"
+        login.href = "/movies-recommendation/home";
+    
+        let regis = document.getElementById("id-get-user-register");
+        regis.innerText = "Alterar meus dados";
+    }
 }

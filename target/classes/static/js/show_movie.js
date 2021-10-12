@@ -24,7 +24,7 @@ export function showMovie(element) {
     const image = document.createElement("img");
     const text = document.createElement("h3");
     const a = document.createElement("a");
-    a.href = "/movies/movie?movie_id=" + element.id;
+    a.href = "/movies-recommendation/movie?movie_id=" + element.id;
     if (element.title.length > 20) {
         text.className = "animeted";
     }

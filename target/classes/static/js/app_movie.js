@@ -1,5 +1,4 @@
-import { APIKEY } from "./app_header.js";
-import { getCookie } from "./cookies.js";
+import { APIKEY, getUser } from "./app_header.js";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -24,10 +23,11 @@ async function getKey() {
     return key;
 
 }
-var userId = getCookie("idUser");
 
+let user;
 showMovie(FINDAPI);
-function showMovie(url) {
+async function showMovie(url) {
+    user = await getUser();
     fetch(url).then(res => res.json())
     .then(async function(data){
         const element = document.getElementById("poster");
@@ -87,8 +87,8 @@ function showMovie(url) {
         rad.forEach(elemnt => {
             elemnt.addEventListener("click", rating);
         });
-        if(userId != "") {
-            initRating(RECOMMENDAPI + `?movie_id=${movieId}&user_id=${userId}`);
+        if(user != null) {
+            initRating(RECOMMENDAPI + `?movie_id=${movieId}`);
         }
     });
 }
@@ -109,8 +109,9 @@ function initRating(url) {
         console.log(error);
     });
 }
+
 function rating() {
-    if (userId != "") {
+    if(user != null) {
         const rad = document.getElementsByName("rate");
         const aval = document.getElementById("user_aval");
         rad.forEach(elemnt => {
@@ -118,17 +119,16 @@ function rating() {
                 user_aval.innerText = "Sua Avaliação: " + elemnt.value;
                 let userRating = {
                     "movieId": movieId,
-                    "userId": userId,
                     "rating": elemnt.value
-                };
-                postRating(userRating);
+                }
+                postRating(userRating);  
             }
         });
     } else {
         const rad = document.getElementsByName("rate");
         rad.forEach(element =>
-            element.checked = false);
-        window.alert("Faça login para poder avaliar os filmes");
+        element.checked = false);
+        window.alert("Faça login para poder avaliar os filmes");    
     }
 }
 
@@ -139,5 +139,5 @@ async function postRating(userRating) {
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    });
+    })
 }

@@ -6,35 +6,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class PageController {
-	@GetMapping("/movies/home")
+	@GetMapping("/movies-recommendation/home")
 	public String home() {
         return "home/home";
     }
-	@GetMapping("/movies/movie")
+	@GetMapping("/movies-recommendation/movie")
     public String movie(@RequestParam(name="movie_id") int movieId) {
         return "movie/movie";
     }
-    @GetMapping("/movies/popular")
+    @GetMapping("/movies-recommendation/popular")
     public String movies() {
         return "movies/popular";
     }
-    @GetMapping("/movies/recommends")
+    @GetMapping("/movies-recommendation/recommends")
     public String recommend() {
         return "recommends/recommend";
     }
-    @GetMapping("/movies/genre")
+    @GetMapping("/movies-recommendation/genre")
     public String genre(@RequestParam(name="genre_id") int genreId) {
         return "genres/genre";
     }
-    @GetMapping("/movies/search")
+    @GetMapping("/movies-recommendation/search")
     public String search() {
         return "search/search";
     }
-    @GetMapping("/movies/register")
+    @GetMapping("/movies-recommendation/register")
     public String register() {
         return "register/register";
     }
-    @GetMapping("/movies/login")
+    @GetMapping("/movies-recommendation/login")
     public String login() {
         return "login/login";
     }

@@ -1,12 +1,15 @@
 package com.recommedation.movie.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.recommedation.movie.model.User;
 import com.recommedation.movie.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,24 +31,27 @@ public class UserService {
 		}
     }
 
-    public User save(User user) {
+    public Object save(User user) {
+        if(userRepository.FindByEmail(user.getEmail()) != null) {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("message", "Email ja existe");
+            return map;
+        }
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    public User update(User user) {
-        return userRepository.save(user);
+    public User update(User user, String oldPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(encoder.matches(oldPassword, findById(user.getId()).getPassword())){
+            user.setPassword(encoder.encode(user.getPassword()));
+            return userRepository.save(user);
+        } else {
+            return null;
+        }
     }
 
     public void delete(User user) {
         userRepository.delete(user);
-    }
-
-    public User login(String email, String password) {
-        User user = userRepository.login(email);
-        if(user == null || !user.getPassword().equals(password)) {
-            return null;
-        } else {
-            return user;
-        }
     }
 }

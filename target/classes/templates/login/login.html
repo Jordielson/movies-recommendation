@@ -6,26 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" th:href="@{/css/style_register.css}">
-    <script type="module" th:src="@{/js/app_login.js}" defer></script>
 </head>
 <body>
     <div th:replace="componets/header"></div>
+    
     <div id="main">
         <h1 id="h1-title"></h1>
-        <form id="form-register" action="">
+        <form id="form-register" th:action="@{/movies-recommendation/login}" method="post">
+            <!-- Error Menssage -->
+            <div th:if="${param.error}">
+                <div class="alert-danager"> Email ou senha inválido!</div>
+            </div>
+
+            <!-- Form -->
             <div class="box">
                 <label for="email">Email</label>
-                <input class="register" type="email" id="email" placeholder="Digite seu email">
+                <input class="register" type="email" id="email" name="username" placeholder="Digite seu email" required>
             </div>
             <div id="div-password" class="box">
                 <label for="password-new" id="lb-password">Senha</label>
-                <input class="register" type="password" id="password" placeholder="Digite sua senha">
+                <input class="register" type="password" name="password" id="password" placeholder="Digite sua senha">
             </div>
             <div class="box">
                 <input class="register" type="submit" id="button" placeholder="Login">
             </div>
             <div class="box">
-                <a href="/movies/register" class="register" id="btn-alter" placeholder="Alterar Senha">Cadratrar-se</a>
+                <a href="/movies-recommendation/register" class="register" id="btn-alter" placeholder="Alterar Senha">Cadratrar-se</a>
             </div>
         </form>
     </div>

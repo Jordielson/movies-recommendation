@@ -1,4 +1,4 @@
-import {getCookie, alterCookiesUser} from "./cookies.js";
+import { getUser } from "./app_header.js";
 
 const APIUSER = "http://localhost:8080/movies/user";
 
@@ -15,7 +15,7 @@ const divNewPassword = document.getElementById("div-new-password");
 const divConfirmPassword = document.getElementById("div-password");
 
 var hiddenItem = true;
-var userItem = "";
+let userlog;
 initUser();
 
 function registerUser() {
@@ -32,8 +32,8 @@ function updateUser() {
 
     let title = document.getElementById("h1-title");
     title.innerText = "Atualizar seus dados";
-    nameUser.value = userItem.name;
-    email.value = userItem.email;
+    nameUser.value = userlog.name;
+    email.value = userlog.email;
 }
 
 // Adicionando eventos as validacoes
@@ -44,54 +44,34 @@ submit.addEventListener("click", function(e){
     validateEmail(email);
 
     let user = {
-        "id": userItem.id, //
         "name": nameUser.value,
         "email": email.value,
         "password": password.value
     };
-    if(userItem != "") {
+    if(userlog != null) {
+        user["id"] = userlog.id
         if (hiddenItem) {
-            user.password = userItem.password;
+            user.password = userlog.password;
         } else {
-            validateOldPassword(oldPassword);
             validatePassword(password, confirmPassword);
+            user["oldPassword"] = oldPassword.value;
         }
         updateUserData(user);
     } else {
         validatePassword(password, confirmPassword);
-        register(user);
+        registerUserData(user);
     }
 });
 
-async function register(user) {
-    await sendUser(user, "POST");
-    window.location.reload();
-}
-
-async function updateUserData(user) {
-    await sendUser(user, "PUT");
-    window.location.reload();
-}
-
-function initUser(id = "") {
-    let idUser = "";
-    idUser = getCookie("idUser") != "" ? getCookie("idUser") : id;
-    if (idUser != "") {
-        getUser(idUser);
-    } else {
+async function initUser() {
+    try {
+        userlog = await getUser();
+        console.log(userlog);
+        updateUser();
+    } catch (error) {
         btnAlter.classList.add("hidden");
         registerUser();
     }
-}
-
-async function getUser(id) {
-    await fetch(APIUSER + "/" + id)
-    .then((res) => res.json())
-    .then((data) => {
-        alterCookiesUser(data)
-        userItem = data;
-    });
-    updateUser();
 }
 
 btnAlter.addEventListener("click", updatePage);
@@ -109,17 +89,45 @@ function updatePage() {
     hiddenItem = !hiddenItem;
 }
 
-async function sendUser(user, method) {
+async function updateUserData(user) {
     await fetch(APIUSER, {
-    method: method,
+    method: "PUT",
     body: JSON.stringify(user),
     headers: {
         "Content-type": "application/json; charset=UTF-8"
     }
     })
-    .then(response => response.json())
-    .then((data) => {
-        alterCookiesUser(data);
+    .then(response => {
+        if (response.status == 200) {
+            alert("Alteração realizada com sucesso!");
+            window.location.reload();
+        } else {
+            alert("Email ou senha invalido!");
+        }
+    })
+    .catch(function(error)  {
+        console.log("Error: " + error);
+    });
+}
+
+async function registerUserData(user) {
+    await fetch(APIUSER, {
+    method: "POST",
+    body: JSON.stringify(user),
+    headers: {
+        "Content-type": "application/json; charset=UTF-8"
+    }
+    })
+    .then(response => {
+        if (response.status == 201) {
+            alert("Cadastro realizado com sucesso!");
+            window.location.reload();
+        } else {
+            response.json().then((data) => printErroMessage(email, data.message));
+        }
+    })
+    .catch(function(error)  {
+        console.log("Error: " + error);
     });
 }
 
@@ -162,7 +170,7 @@ function validatePassword(password, confirmPassword) {
 }
 
 function validateOldPassword(password) {
-    if(password.value != userItem.password) {
+    if(password.value != userlog.password) {
         printErroMessage(password, "Senha Inválida!");
         throw "Password invalid";
     }
